@@ -1,0 +1,96 @@
+swagger: '2.0'
+info:
+  description: Zalango
+  title: Zalango
+  version: 1.0.0
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - http
+
+paths:
+  /getConfig:
+    get:
+      summary: "Get service configuration"
+      description: "Get flags and service configuration based on tags"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: service
+          type: string
+          required: true
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Data"
+          # description: "successful operation"
+          # schema:
+          #   $ref: "#/definitions/ServiceConfig"
+        400:
+          description: "Invalid service parameter"
+          schema:
+            $ref: "#/definitions/BadRequest"
+        500:
+          description: "Zalango is down! not able to fetch service config"
+          schema:
+            $ref: "#/definitions/InternalServerError"
+
+definitions:
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      message_title:
+        type: string
+      message_severity:
+        type: string
+  BadRequest:
+    type: object
+    properties:
+      status_code:
+        type: integer
+      data:
+        type: object
+      success:
+        type: boolean
+        default: false
+      errors:
+        $ref: "#/definitions/ErrorResponse"
+  InternalServerError:
+    type: object
+    properties:
+      status_code:
+        type: integer
+      data:
+        type: object
+      success:
+        type: boolean
+        default: false
+      errors:
+        $ref: "#/definitions/ErrorResponse"
+  Data:
+    type: object
+    properties:
+      KEY:
+        type: string
+  ServiceConfig:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/Data"
+        type: string
+      success:
+        type: boolean
+      error:
+        type: array
+          
+      
